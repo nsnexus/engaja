@@ -4,13 +4,13 @@ import { ShieldCheck, Zap, Lock, Headphones } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#07060f] pt-20 pb-12 relative overflow-hidden">
+    <footer className="border-t border-white/[0.08] bg-[#05040a] pt-16 pb-12 relative overflow-hidden w-full">
       {/* Background ambient lighting */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[250px] bg-violet-600/5 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-violet-600/5 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="wrap">
-        {/* Trust Badges Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-14 mb-14 border-b border-white/[0.06]">
+        {/* Trust Badges Strip (Clean 4-column balanced grid) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-12 mb-12 border-b border-white/[0.06]">
           <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
             <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400 flex-shrink-0">
               <Zap size={18} />
@@ -47,13 +47,13 @@ export function Footer() {
             </div>
             <div>
               <p className="text-xs font-bold text-white">Suporte Humanizado</p>
-              <p className="text-[11px] text-[#9d99b5]">Atendimento via Whats</p>
+              <p className="text-[11px] text-[#9d99b5]">Atendimento via WhatsApp</p>
             </div>
           </div>
         </div>
 
         {/* Main Footer Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 pb-12">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="logo flex items-center gap-3 font-extrabold text-2xl mono text-white select-none">
@@ -76,7 +76,7 @@ export function Footer() {
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 text-violet-300">
               Plataforma
             </h4>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link href="#pacotes" className="text-[#9d99b5] hover:text-white transition-colors">
                   Todos os Pacotes
@@ -105,7 +105,7 @@ export function Footer() {
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 text-violet-300">
               Suporte & Ajuda
             </h4>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link href="#faq" className="text-[#9d99b5] hover:text-white transition-colors">
                   Perguntas Frequentes
@@ -152,10 +152,10 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/[0.06] pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#756B96]">
-          <p>© 2026 EngajaPro. Todos os direitos reservados. CNPJ sob consulta.</p>
+          <p>© 2026 EngajaPro. Todos os direitos reservados.</p>
           <div className="flex items-center gap-6">
             <Link href="#" className="hover:text-white transition-colors">Termos de Uso</Link>
-            <Link href="#" className="hover:text-white transition-colors">Política de Privacidade</Link>
+            <Link href="#" className="hover:text-white transition-colors">Privacidade</Link>
             <Link href="#" className="hover:text-white transition-colors">Reembolso</Link>
           </div>
         </div>
