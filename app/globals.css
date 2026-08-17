@@ -254,45 +254,44 @@ h1, h2, h3, h4, h5, h6 {
   place-items: center;
   height: 100%;
   perspective: 1800px;
+  padding: 40px 0;
 }
 
 .phone-3d {
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateY(-24deg) rotateX(10deg) rotateZ(2deg);
+  transform: rotateY(-20deg) rotateX(8deg) rotateZ(1deg);
   animation: phonefloat 6s ease-in-out infinite;
   will-change: transform;
 }
 
 @keyframes phonefloat {
-  50% { transform: rotateY(-24deg) rotateX(10deg) translateY(-18px); }
+  50% { transform: rotateY(-20deg) rotateX(8deg) translateY(-16px); }
 }
 
 /* 3D Phone Solid Body */
 .phone {
-  width: 300px;
-  height: 610px;
+  width: 320px;
+  height: 650px;
   background: #000;
-  border-radius: 46px;
+  border-radius: 48px;
   padding: 12px;
   position: relative;
   z-index: 2;
   transform-style: preserve-3d;
-  /* Thick Titanium Border with Specular Highlight */
-  border: 3px solid #4a4568;
+  border: 3.5px solid #453f64;
   box-shadow: 
-    30px 50px 100px rgba(0, 0, 0, 0.85),
-    10px 20px 40px rgba(0, 0, 0, 0.7),
-    0 0 60px rgba(139, 92, 246, 0.25);
+    25px 45px 90px rgba(0, 0, 0, 0.85),
+    0 0 60px rgba(139, 92, 246, 0.2);
 }
 
-/* 3D Extruded Metallic Layers (Solid thickness) */
+/* 3D Extruded Metallic Layers */
 .phone-depth-1 {
   position: absolute;
   inset: 0;
-  border-radius: 46px;
-  background: #3b3658;
-  border: 3px solid #5a5482;
+  border-radius: 48px;
+  background: #363152;
+  border: 3.5px solid #524b78;
   transform: translateZ(-4px);
   pointer-events: none;
 }
@@ -300,9 +299,9 @@ h1, h2, h3, h4, h5, h6 {
 .phone-depth-2 {
   position: absolute;
   inset: 0;
-  border-radius: 46px;
-  background: #2a2542;
-  border: 3px solid #423c65;
+  border-radius: 48px;
+  background: #25203c;
+  border: 3.5px solid #3d375e;
   transform: translateZ(-8px);
   pointer-events: none;
 }
@@ -310,9 +309,9 @@ h1, h2, h3, h4, h5, h6 {
 .phone-depth-3 {
   position: absolute;
   inset: 0;
-  border-radius: 46px;
-  background: #1e1932;
-  border: 3px solid #2f2a4a;
+  border-radius: 48px;
+  background: #19152b;
+  border: 3.5px solid #2b2646;
   transform: translateZ(-12px);
   pointer-events: none;
 }
@@ -320,20 +319,20 @@ h1, h2, h3, h4, h5, h6 {
 .phone-back {
   position: absolute;
   inset: 0;
-  border-radius: 46px;
-  background: linear-gradient(160deg, #181428, #0a0814);
-  border: 3px solid #221d38;
+  border-radius: 48px;
+  background: linear-gradient(160deg, #161224, #080610);
+  border: 3.5px solid #1f1a34;
   transform: translateZ(-16px);
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
   pointer-events: none;
 }
 
-/* Right Metallic Edge (facing the viewer due to -24deg Y rotation) */
+/* Right Metallic Edge */
 .phone-edge-right {
   position: absolute;
   right: -8px;
-  top: 40px;
-  bottom: 40px;
+  top: 45px;
+  bottom: 45px;
   width: 16px;
   background: linear-gradient(180deg, #6c6694 0%, #3e385e 25%, #24203a 50%, #4a4470 80%, #766f9f 100%);
   transform-origin: right center;
@@ -347,7 +346,7 @@ h1, h2, h3, h4, h5, h6 {
 .phone-btn-power {
   position: absolute;
   right: -6px;
-  top: 160px;
+  top: 170px;
   width: 5px;
   height: 65px;
   background: #7d77a8;
@@ -359,7 +358,7 @@ h1, h2, h3, h4, h5, h6 {
 .phone-btn-vol-up {
   position: absolute;
   left: -6px;
-  top: 140px;
+  top: 150px;
   width: 5px;
   height: 48px;
   background: #4a4568;
@@ -370,7 +369,7 @@ h1, h2, h3, h4, h5, h6 {
 .phone-btn-vol-down {
   position: absolute;
   left: -6px;
-  top: 200px;
+  top: 210px;
   width: 5px;
   height: 48px;
   background: #4a4568;
@@ -384,18 +383,18 @@ h1, h2, h3, h4, h5, h6 {
   left: 50%;
   transform: translateX(-50%);
   width: 105px;
-  height: 28px;
+  height: 26px;
   background: #000;
   border-radius: 0 0 18px 18px;
   z-index: 6;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-top: none;
 }
 
 .phone-notch::after {
   content: '';
   position: absolute;
-  top: 8px;
+  top: 7px;
   right: 22px;
   width: 10px;
   height: 10px;
@@ -406,20 +405,23 @@ h1, h2, h3, h4, h5, h6 {
 
 .phone-screen {
   background: #000;
-  border-radius: 34px;
+  border-radius: 36px;
   height: 100%;
   overflow: hidden;
   position: relative;
   transform: translateZ(1px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .phone-glass {
   position: absolute;
   inset: 0;
-  border-radius: 34px;
+  border-radius: 36px;
   z-index: 5;
   pointer-events: none;
-  background: linear-gradient(125deg, rgba(255, 255, 255, 0.16) 0%, transparent 35%, transparent 65%, rgba(255, 255, 255, 0.04) 100%);
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, transparent 35%, transparent 65%, rgba(255, 255, 255, 0.03) 100%);
 }
 
 /* Instagram UI */
