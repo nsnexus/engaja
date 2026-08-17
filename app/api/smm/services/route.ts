@@ -2,6 +2,8 @@
 // Server-side proxy — nunca expõe a API key ao client
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const API_URL = process.env.MACHINESMM_API_URL ?? "https://machinesmm.com/api/v2";
 const API_KEY = process.env.MACHINESMM_API_KEY ?? "";
 

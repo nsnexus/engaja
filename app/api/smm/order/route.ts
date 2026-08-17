@@ -2,6 +2,8 @@
 // Cria pedido na MachinesSMM após pagamento confirmado
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const API_URL = process.env.MACHINESMM_API_URL ?? "https://machinesmm.com/api/v2";
 const API_KEY = process.env.MACHINESMM_API_KEY ?? "";
 

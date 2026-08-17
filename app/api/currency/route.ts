@@ -2,6 +2,8 @@
 // Cotação USD→BRL em tempo real via AwesomeAPI (sem chave necessária)
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 export async function GET() {
   try {
     const res  = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL", {

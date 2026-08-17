@@ -1,4 +1,5 @@
 "use client";
+export const runtime = "edge";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Clock, Check, XCircle, Loader2, Package, User, CreditCard } from "lucide-react";
