@@ -198,18 +198,55 @@ export default function HomePage() {
         </section>
 
         {/* ─── Bottom CTA Banner ─── */}
-        <section className="py-20 relative border-t border-white/[0.06]">
-          <div className="wrap">
-            <div className="cta relative rounded-[32px] p-12 sm:p-20 text-center overflow-hidden border border-white/[0.08] bg-gradient-to-br from-violet-600/15 via-pink-500/10 to-transparent">
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 mono">
-                Pronto pra <span className="grad">bombar</span>? 🚀
+        <section className="py-24 sm:py-32 relative border-t border-white/[0.06] overflow-hidden">
+          <div className="wrap relative">
+            {/* Background Glow Mesh */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-violet-600/20 via-pink-500/15 to-blue-600/20 rounded-full blur-[120px] pointer-events-none -z-10" />
+
+            <div className="relative rounded-[32px] sm:rounded-[40px] p-10 sm:p-20 text-center overflow-hidden border border-violet-500/20 bg-gradient-to-b from-[#161226]/90 via-[#0d0b1a]/95 to-[#07060f] shadow-[0_20px_80px_rgba(139,92,246,0.15)]">
+              {/* Subtle top edge highlight */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-violet-400 to-transparent opacity-50" />
+
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-xs font-bold text-violet-300 mb-6">
+                <span>🚀 Comece a crescer hoje mesmo</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6 mono max-w-2xl mx-auto">
+                Pronto pra fazer seu perfil <span className="grad">bombar</span>?
               </h2>
-              <p className="text-[#9d99b5] text-base sm:text-lg mb-8 max-w-[480px] mx-auto">
-                Escolha seu pacote agora e comece a crescer ainda hoje.
+
+              <p className="text-[#B4ACD4] text-base sm:text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+                Junte-se a milhares de criadores e empresas que já aceleraram sua autoridade e alcance nas redes sociais.
               </p>
-              <Link href="#pacotes" className="btn btn-grad">
-                Quero impulsionar meu perfil
-              </Link>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                <Link
+                  href="#pacotes"
+                  className="btn btn-grad text-base sm:text-lg py-4 px-9 shadow-[0_10px_35px_rgba(139,92,246,0.45)] hover:shadow-[0_15px_45px_rgba(236,72,153,0.55)] transition-all"
+                >
+                  <span>Quero impulsionar meu perfil</span>
+                  <span>⚡</span>
+                </Link>
+                <Link
+                  href="#como"
+                  className="btn btn-glass text-sm sm:text-base py-4 px-8"
+                >
+                  Como funciona
+                </Link>
+              </div>
+
+              {/* Badges Footer inside CTA */}
+              <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#9d99b5] pt-4 border-t border-white/[0.06] max-w-lg mx-auto">
+                <span className="flex items-center gap-1.5">
+                  <span className="text-emerald-400">✓</span> Início em minutos
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="text-emerald-400">✓</span> 100% sem senha
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="text-emerald-400">✓</span> Garantia de 30 dias
+                </span>
+              </div>
             </div>
           </div>
         </section>
