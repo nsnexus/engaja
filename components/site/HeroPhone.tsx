@@ -61,9 +61,9 @@ export function HeroPhone() {
           </div>
         </div>
 
-        {/* Floating Neon Card 3: Views (Rotating Cyan/Blue Laser Beam) - Bottom Right */}
+        {/* Floating Neon Card 3: Views (Rotating Cyan/Blue Laser Beam) - Mid-Right */}
         <div
-          className="absolute bottom-20 -right-12 sm:-right-28 z-30 animate-[floaty_4.8s_ease-in-out_infinite_2s]"
+          className="absolute bottom-40 -right-12 sm:-right-28 z-30 animate-[floaty_4.8s_ease-in-out_infinite_2s]"
           style={{
             "--beam-color": "#22d3ee",
             "--glow-color": "rgba(34, 211, 238, 0.5)",
