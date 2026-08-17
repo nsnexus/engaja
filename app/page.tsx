@@ -51,10 +51,10 @@ export default function HomePage() {
 
               <div className="trust flex items-center gap-5 flex-wrap">
                 <div className="avatars flex">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
+                  <span style={{ backgroundImage: "url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80')" }} />
+                  <span style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80')" }} />
+                  <span style={{ backgroundImage: "url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80')" }} />
+                  <span style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80')" }} />
                 </div>
                 <div>
                   <div className="stars text-[#fbbf24] text-sm">

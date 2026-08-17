@@ -3,81 +3,133 @@ import React from "react";
 
 export function HeroPhone() {
   return (
-    <div className="hero-visual relative flex items-center justify-center h-full min-h-[580px]">
-      {/* Floating Chips */}
-      <div className="chip chip-1">
-        <div className="ci" style={{ background: "rgba(236, 72, 153, 0.15)" }}>❤️</div>
-        <div>
-          <strong className="text-white text-xs">+2.480</strong>
-          <small className="text-[#9d99b5] text-[11px] block">curtidas hoje</small>
-        </div>
-      </div>
-
-      <div className="chip chip-2">
-        <div className="ci" style={{ background: "rgba(139, 92, 246, 0.15)" }}>👥</div>
-        <div>
-          <strong className="text-white text-xs">+1.240</strong>
-          <small className="text-[#9d99b5] text-[11px] block">novos seguidores</small>
-        </div>
-      </div>
-
-      <div className="chip chip-3">
-        <div className="ci" style={{ background: "rgba(34, 211, 238, 0.15)" }}>▶️</div>
-        <div>
-          <strong className="text-white text-xs">+18.9k</strong>
-          <small className="text-[#9d99b5] text-[11px] block">visualizações</small>
-        </div>
-      </div>
-
-      {/* Phone Body */}
-      <div className="phone">
-        <div className="phone-notch" />
-        <div className="phone-screen flex flex-col justify-between">
+    <div className="hero-visual relative flex items-center justify-center h-full min-h-[620px]">
+      <div className="phone-3d" id="phone3d">
+        {/* Floating Dynamic Metric Chips */}
+        <div className="chip chip-1">
+          <div className="ci" style={{ background: "rgba(236, 72, 153, 0.15)" }}>❤️</div>
           <div>
-            <div className="ps-top flex items-center gap-3 my-4">
-              <div className="ps-av w-12 h-12 rounded-full flex-shrink-0" style={{ background: "var(--grad)" }} />
-              <div>
-                <strong className="text-white text-sm block">@seu_perfil</strong>
-                <small className="text-[#9d99b5] text-xs">Crescendo em tempo real 📈</small>
-              </div>
-            </div>
-
-            <div className="ps-metric bg-white/[0.04] border border-white/[0.08] rounded-2xl p-3.5 mb-3 flex justify-between items-center">
-              <div>
-                <div className="l text-xs text-[#9d99b5]">Seguidores</div>
-                <div className="v font-bold text-white text-lg mono">24.8k</div>
-              </div>
-              <div className="up text-xs font-bold text-[#a3e635]">▲ 18%</div>
-            </div>
-
-            <div className="ps-metric bg-white/[0.04] border border-white/[0.08] rounded-2xl p-3.5 mb-3 flex justify-between items-center">
-              <div>
-                <div className="l text-xs text-[#9d99b5]">Curtidas</div>
-                <div className="v font-bold text-white text-lg mono">92.3k</div>
-              </div>
-              <div className="up text-xs font-bold text-[#a3e635]">▲ 34%</div>
-            </div>
-
-            <div className="ps-metric bg-white/[0.04] border border-white/[0.08] rounded-2xl p-3.5 mb-3 flex justify-between items-center">
-              <div>
-                <div className="l text-xs text-[#9d99b5]">Alcance</div>
-                <div className="v font-bold text-white text-lg mono">318k</div>
-              </div>
-              <div className="up text-xs font-bold text-[#a3e635]">▲ 61%</div>
-            </div>
+            <strong>+2.480</strong>
+            <small>curtidas hoje</small>
           </div>
+        </div>
 
-          <div className="ps-metric block bg-white/[0.04] border border-white/[0.08] rounded-2xl p-3.5 mt-2">
-            <div className="l text-xs text-[#9d99b5] mb-1">Engajamento (7 dias)</div>
-            <div className="spark">
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
+        <div className="chip chip-2">
+          <div className="ci" style={{ background: "rgba(139, 92, 246, 0.15)" }}>👥</div>
+          <div>
+            <strong>+1.240</strong>
+            <small>novos seguidores</small>
+          </div>
+        </div>
+
+        <div className="chip chip-3">
+          <div className="ci" style={{ background: "rgba(34, 211, 238, 0.15)" }}>▶️</div>
+          <div>
+            <strong>+18.9k</strong>
+            <small>visualizações</small>
+          </div>
+        </div>
+
+        {/* 3D Phone Body */}
+        <div className="phone">
+          <span className="phone-side l" />
+          <span className="phone-side l s2" />
+          <span className="phone-side r" />
+          <div className="phone-notch" />
+          
+          <div className="phone-screen">
+            <div className="phone-glass" />
+            <div className="ig">
+              {/* Status Bar */}
+              <div className="ig-status">
+                <span>9:41</span>
+                <span className="sig">📶 &nbsp; 📡 &nbsp; 🔋</span>
+              </div>
+
+              {/* Instagram Header */}
+              <div className="ig-head">
+                <span className="ig-logo">Instagram</span>
+                <span className="hi">➕ &nbsp; ♡ &nbsp; ✈️</span>
+              </div>
+
+              {/* Stories Bar */}
+              <div className="ig-stories">
+                <div className="story">
+                  <span className="ring me">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80') center/cover" }} />
+                  </span>
+                  <small>Seu story</small>
+                </div>
+                <div className="story">
+                  <span className="ring">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&q=80') center/cover" }} />
+                  </span>
+                  <small>marina.s</small>
+                </div>
+                <div className="story">
+                  <span className="ring">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80') center/cover" }} />
+                  </span>
+                  <small>lucas_fit</small>
+                </div>
+                <div className="story">
+                  <span className="ring">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80') center/cover" }} />
+                  </span>
+                  <small>bia.makeup</small>
+                </div>
+                <div className="story">
+                  <span className="ring">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80') center/cover" }} />
+                  </span>
+                  <small>rafa.dev</small>
+                </div>
+              </div>
+
+              {/* Post Feed */}
+              <div className="ig-post">
+                <div className="post-top">
+                  <span className="pav">
+                    <i style={{ background: "#111 url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80') center/cover" }} />
+                  </span>
+                  <div>
+                    <strong>seu_perfil</strong>
+                    <small>Parauapebas, Pará</small>
+                  </div>
+                  <span className="dots">⋯</span>
+                </div>
+
+                <div className="post-img">
+                  <span className="heart-pop">♥</span>
+                </div>
+
+                <div className="post-actions">
+                  <span className="liked">♥</span>
+                  <span>💬</span>
+                  <span>✈️</span>
+                  <span className="save">🔖</span>
+                </div>
+
+                <div className="post-likes">
+                  Curtido por <b>marina.s</b> e <b>outras 12.480 pessoas</b>
+                </div>
+
+                <div className="post-cap">
+                  <b>seu_perfil</b> Crescendo todo dia com a EngajaPro 🚀✨
+                </div>
+
+                <div className="post-cmt">Ver todos os 340 comentários</div>
+                <div className="post-time">há 2 minutos</div>
+              </div>
+
+              {/* Bottom Tab Bar */}
+              <div className="ig-tabs">
+                <span>🏠</span>
+                <span>🔍</span>
+                <span>➕</span>
+                <span>🎬</span>
+                <span className="tav" />
+              </div>
             </div>
           </div>
         </div>
