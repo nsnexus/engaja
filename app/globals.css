@@ -247,84 +247,161 @@ h1, h2, h3, h4, h5, h6 {
   50% { opacity: 0.4; }
 }
 
-/* Hero visual - 3D phone mock (Instagram) */
+/* Hero visual - True 3D Volumetric Solid Smartphone (Instagram) */
 .hero-visual {
   position: relative;
   display: grid;
   place-items: center;
   height: 100%;
-  perspective: 1600px;
+  perspective: 1800px;
 }
 
 .phone-3d {
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateY(-22deg) rotateX(8deg) rotateZ(1deg);
+  transform: rotateY(-24deg) rotateX(10deg) rotateZ(2deg);
   animation: phonefloat 6s ease-in-out infinite;
   will-change: transform;
 }
 
 @keyframes phonefloat {
-  50% { transform: rotateY(-22deg) rotateX(8deg) translateY(-18px); }
+  50% { transform: rotateY(-24deg) rotateX(10deg) translateY(-18px); }
 }
 
+/* 3D Phone Solid Body */
 .phone {
   width: 300px;
   height: 610px;
-  background: linear-gradient(160deg, #2a2740, #14121f);
+  background: #000;
   border-radius: 46px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  padding: 13px;
+  padding: 12px;
   position: relative;
   z-index: 2;
   transform-style: preserve-3d;
-  box-shadow: 0 50px 120px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(0, 0, 0, 0.3), var(--glow);
+  /* Thick Titanium Border with Specular Highlight */
+  border: 3px solid #4a4568;
+  box-shadow: 
+    30px 50px 100px rgba(0, 0, 0, 0.85),
+    10px 20px 40px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(139, 92, 246, 0.25);
 }
 
-.phone::before {
-  content: '';
+/* 3D Extruded Metallic Layers (Solid thickness) */
+.phone-depth-1 {
   position: absolute;
   inset: 0;
   border-radius: 46px;
-  background: linear-gradient(160deg, #0a0912, #000);
-  transform: translateZ(-18px);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+  background: #3b3658;
+  border: 3px solid #5a5482;
+  transform: translateZ(-4px);
+  pointer-events: none;
 }
 
-.phone-side {
+.phone-depth-2 {
   position: absolute;
-  top: 120px;
-  width: 3px;
-  height: 60px;
-  border-radius: 3px;
-  background: #2a2740;
+  inset: 0;
+  border-radius: 46px;
+  background: #2a2542;
+  border: 3px solid #423c65;
+  transform: translateZ(-8px);
+  pointer-events: none;
 }
 
-.phone-side.l { left: -3px; }
-.phone-side.l.s2 { top: 200px; height: 40px; }
-.phone-side.r { right: -3px; top: 150px; height: 80px; }
+.phone-depth-3 {
+  position: absolute;
+  inset: 0;
+  border-radius: 46px;
+  background: #1e1932;
+  border: 3px solid #2f2a4a;
+  transform: translateZ(-12px);
+  pointer-events: none;
+}
+
+.phone-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 46px;
+  background: linear-gradient(160deg, #181428, #0a0814);
+  border: 3px solid #221d38;
+  transform: translateZ(-16px);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+/* Right Metallic Edge (facing the viewer due to -24deg Y rotation) */
+.phone-edge-right {
+  position: absolute;
+  right: -8px;
+  top: 40px;
+  bottom: 40px;
+  width: 16px;
+  background: linear-gradient(180deg, #6c6694 0%, #3e385e 25%, #24203a 50%, #4a4470 80%, #766f9f 100%);
+  transform-origin: right center;
+  transform: rotateY(90deg) translateZ(0px);
+  border-radius: 4px;
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+/* Hardware buttons on the side */
+.phone-btn-power {
+  position: absolute;
+  right: -6px;
+  top: 160px;
+  width: 5px;
+  height: 65px;
+  background: #7d77a8;
+  border-radius: 3px;
+  transform: translateZ(-8px);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.phone-btn-vol-up {
+  position: absolute;
+  left: -6px;
+  top: 140px;
+  width: 5px;
+  height: 48px;
+  background: #4a4568;
+  border-radius: 3px;
+  transform: translateZ(-8px);
+}
+
+.phone-btn-vol-down {
+  position: absolute;
+  left: -6px;
+  top: 200px;
+  width: 5px;
+  height: 48px;
+  background: #4a4568;
+  border-radius: 3px;
+  transform: translateZ(-8px);
+}
 
 .phone-notch {
   position: absolute;
-  top: 13px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
+  width: 105px;
   height: 28px;
   background: #000;
   border-radius: 0 0 18px 18px;
   z-index: 6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
 }
 
 .phone-notch::after {
   content: '';
   position: absolute;
-  top: 9px;
+  top: 8px;
   right: 22px;
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #3b3b5a, #0a0a14);
+  background: radial-gradient(circle at 35% 35%, #4f4c75, #080812);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .phone-screen {
@@ -333,6 +410,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   overflow: hidden;
   position: relative;
+  transform: translateZ(1px);
 }
 
 .phone-glass {
@@ -341,7 +419,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 34px;
   z-index: 5;
   pointer-events: none;
-  background: linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, transparent 35%, transparent 65%, rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.16) 0%, transparent 35%, transparent 65%, rgba(255, 255, 255, 0.04) 100%);
 }
 
 /* Instagram UI */

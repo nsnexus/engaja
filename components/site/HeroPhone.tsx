@@ -3,11 +3,14 @@ import React from "react";
 
 export function HeroPhone() {
   return (
-    <div className="hero-visual relative flex items-center justify-center h-full min-h-[620px]">
+    <div className="hero-visual relative flex items-center justify-center h-full min-h-[640px]">
+      {/* Dynamic Ambient Backlight Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-gradient-to-tr from-pink-600/30 via-violet-600/35 to-cyan-500/25 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse" />
+
       <div className="phone-3d" id="phone3d">
         {/* Floating Neon Card 1: Likes (Pink Glow) */}
         <div className="chip chip-1">
-          <div className="ci" style={{ background: "linear-gradient(135deg, #f43f5e, #ec4899)", boxShadow: "0 0 14px rgba(244,63,94,0.6)" }}>
+          <div className="ci" style={{ background: "linear-gradient(135deg, #f43f5e, #ec4899)", boxShadow: "0 0 14px rgba(244,63,94,0.7)" }}>
             ❤️
           </div>
           <div>
@@ -18,7 +21,7 @@ export function HeroPhone() {
 
         {/* Floating Neon Card 2: Followers (Violet Glow) */}
         <div className="chip chip-2">
-          <div className="ci" style={{ background: "linear-gradient(135deg, #8b5cf6, #6366f1)", boxShadow: "0 0 14px rgba(139,92,246,0.6)" }}>
+          <div className="ci" style={{ background: "linear-gradient(135deg, #8b5cf6, #6366f1)", boxShadow: "0 0 14px rgba(139,92,246,0.7)" }}>
             👥
           </div>
           <div>
@@ -29,7 +32,7 @@ export function HeroPhone() {
 
         {/* Floating Neon Card 3: Views (Cyan Glow) */}
         <div className="chip chip-3">
-          <div className="ci" style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 0 14px rgba(6,182,212,0.6)" }}>
+          <div className="ci" style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 0 14px rgba(6,182,212,0.7)" }}>
             ▶️
           </div>
           <div>
@@ -38,13 +41,26 @@ export function HeroPhone() {
           </div>
         </div>
 
-        {/* Pure CSS 3D iPhone Body */}
+        {/* Solid 3D Smartphone Extruded Chassis */}
         <div className="phone">
-          <span className="phone-side l" />
-          <span className="phone-side l s2" />
-          <span className="phone-side r" />
+          {/* Volumetric Thickness Extrusion Layers */}
+          <div className="phone-depth-1" />
+          <div className="phone-depth-2" />
+          <div className="phone-depth-3" />
+          <div className="phone-back" />
+
+          {/* Right Metallic Chamfered Edge */}
+          <div className="phone-edge-right" />
+
+          {/* Hardware Buttons */}
+          <span className="phone-btn-power" />
+          <span className="phone-btn-vol-up" />
+          <span className="phone-btn-vol-down" />
+
+          {/* Dynamic Island / Notch */}
           <div className="phone-notch" />
-          
+
+          {/* Screen Content */}
           <div className="phone-screen">
             <div className="phone-glass" />
             <div className="ig">
