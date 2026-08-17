@@ -14,6 +14,9 @@ export interface OrderPayment {
   method: PaymentMethod;
   status: PaymentStatus;
   transactionId?: string;
+  txid?: string;
+  pixCopiaECola?: string;
+  paidAt?: string | Date;
 }
 
 export interface Order {
@@ -26,6 +29,11 @@ export interface Order {
   payment: OrderPayment;
   status: OrderStatus;
   userId?: string | null;
+  paymentIntentId?: string;
+  previousPaymentIntentIds?: string[];
+  pixCopiaECola?: string;
+  smmOrderId?: number | string;
+  smmStatus?: string;
   notes?: string;
   createdAt: Date;
   updatedAt: Date;

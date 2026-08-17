@@ -1,13 +1,17 @@
 "use client";
+
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Check, Loader2, Package } from "lucide-react";
+import { Check, Loader2, Package, QrCode, Sparkles, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useOrder } from "@/hooks/useOrder";
 import { formatCurrency, formatDate, STATUS_LABELS } from "@/lib/utils";
 import { SocialIcon } from "@/components/ui/SocialIcon";
+import { PixPaymentModal } from "@/components/site/PixPaymentModal";
+import { requestPixCharge } from "@/lib/pixCheckout";
 import type { OrderStatus } from "@/types";
 
 const STATUS_STEPS: OrderStatus[] = ["pendente", "processando", "concluido"];
@@ -30,6 +34,14 @@ export function PedidoClient() {
   const params = useParams();
   const id = typeof params.id === "string" ? params.id : null;
   const { order, loading } = useOrder(id);
+  const [isGeneratingPix, setIsGeneratingPix] = useState(false);
+  const [pixModalData, setPixModalData] = useState<{
+    orderId: string;
+    paymentId: string;
+    pixCopiaECola: string;
+    amount: number;
+    packageTitle: string;
+  } | null>(null);
 
   if (loading) {
     return (
@@ -63,6 +75,44 @@ export function PedidoClient() {
 
   const progress = PROGRESS_MAP[order.status] ?? 0;
   const cancelled = order.status === "cancelado";
+  const isAwaitingPayment = order.status === "pendente" && order.payment?.status === "aguardando";
+
+  const handleOpenPix = async () => {
+    if (order.paymentIntentId && order.pixCopiaECola) {
+      setPixModalData({
+        orderId: order.id,
+        paymentId: order.paymentIntentId,
+        pixCopiaECola: order.pixCopiaECola,
+        amount: order.price,
+        packageTitle: order.packageSnapshot.title,
+      });
+      return;
+    }
+
+    setIsGeneratingPix(true);
+    try {
+      const res = await requestPixCharge({
+        orderId: order.id,
+        packageId: order.packageId,
+        customerName: order.customer.name,
+        customerEmail: order.customer.email,
+      });
+
+      if (res.ok) {
+        setPixModalData({
+          orderId: order.id,
+          paymentId: res.data.paymentId,
+          pixCopiaECola: res.data.qrCode,
+          amount: order.price,
+          packageTitle: order.packageSnapshot.title,
+        });
+      }
+    } catch (err) {
+      console.warn("Erro ao gerar Pix:", err);
+    } finally {
+      setIsGeneratingPix(false);
+    }
+  };
 
   return (
     <>
@@ -72,18 +122,46 @@ export function PedidoClient() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="text-4xl mb-3">
-              {order.status === "concluido" ? "🎉" : cancelled ? "❌" : "⚡"}
+              {order.status === "concluido" ? "🎉" : isAwaitingPayment ? "💳" : cancelled ? "❌" : "⚡"}
             </div>
             <h1 className="text-2xl font-extrabold text-white mb-2">
-              {order.status === "concluido" ? "Pedido entregue com sucesso!" : cancelled ? "Pedido cancelado" : "Pedido em andamento"}
+              {order.status === "concluido"
+                ? "Pedido entregue com sucesso!"
+                : isAwaitingPayment
+                ? "Aguardando Pagamento Pix"
+                : cancelled
+                ? "Pedido cancelado"
+                : "Pedido em andamento"}
             </h1>
             <div className="flex items-center justify-center gap-2">
-              <Badge variant={STATUS_BADGE_MAP[order.status]} dot>
-                {STATUS_LABELS[order.status]}
+              <Badge variant={isAwaitingPayment ? "pending" : STATUS_BADGE_MAP[order.status]} dot>
+                {isAwaitingPayment ? "Aguardando Pix" : STATUS_LABELS[order.status]}
               </Badge>
               <span className="text-xs text-[#756B96] num font-bold">#{order.id.slice(0, 8).toUpperCase()}</span>
             </div>
           </div>
+
+          {/* ─── Banner de Pagamento Pendente ─── */}
+          {isAwaitingPayment && (
+            <div className="bg-gradient-to-r from-violet-900/40 via-purple-900/30 to-indigo-900/40 border border-violet-500/40 rounded-2xl p-6 mb-6 shadow-[0_0_30px_rgba(139,92,246,0.2)] text-center animate-fade-in">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/20 text-violet-300 text-xs font-bold mb-3">
+                <Sparkles size={13} />
+                <span>Liberação Automática via Efí Bank</span>
+              </div>
+              <p className="text-sm font-semibold text-white mb-1">Seu pedido foi registrado!</p>
+              <p className="text-xs text-[#B4ACD4] mb-4">
+                Efetue o pagamento via Pix no valor de <strong className="text-white num">{formatCurrency(order.price)}</strong> para iniciar a entrega imediata.
+              </p>
+              <Button
+                onClick={handleOpenPix}
+                loading={isGeneratingPix}
+                className="w-full bg-gradient-to-r from-violet-600 via-indigo-600 to-fuchsia-600 hover:brightness-110 shadow-[0_0_20px_rgba(139,92,246,0.4)] text-white font-bold py-3.5"
+              >
+                <QrCode size={16} />
+                Pagar com Pix / Ver QR Code
+              </Button>
+            </div>
+          )}
 
           {/* ─── Pulse delivery bar ─── */}
           {!cancelled && (
@@ -153,6 +231,18 @@ export function PedidoClient() {
           </div>
         </div>
       </main>
+
+      {/* Modal de Pagamento Pix */}
+      {pixModalData && (
+        <PixPaymentModal
+          orderId={pixModalData.orderId}
+          paymentId={pixModalData.paymentId}
+          pixCopiaECola={pixModalData.pixCopiaECola}
+          amount={pixModalData.amount}
+          packageTitle={pixModalData.packageTitle}
+          onClose={() => setPixModalData(null)}
+        />
+      )}
     </>
   );
 }

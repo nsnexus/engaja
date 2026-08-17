@@ -1,23 +1,20 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, CreditCard, QrCode, FileText, ArrowLeft, Lock } from "lucide-react";
+import { Check, QrCode, ArrowLeft, Lock, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { Button } from "@/components/ui/Button";
-import { Input, Select } from "@/components/ui/Input";
+import { Input } from "@/components/ui/Input";
 import { useCart } from "@/store/cart";
 import { createOrder } from "@/lib/firebase/firestore";
 import { formatCurrency } from "@/lib/utils";
 import { SocialIcon } from "@/components/ui/SocialIcon";
-import type { OrderInput, PaymentMethod } from "@/types";
+import { PixPaymentModal } from "@/components/site/PixPaymentModal";
+import { requestPixCharge } from "@/lib/pixCheckout";
+import type { OrderInput } from "@/types";
 
-const PAYMENT_OPTIONS: { id: PaymentMethod; icon: typeof QrCode; label: string; desc: string }[] = [
-  { id: "pix",    icon: QrCode,      label: "Pix Instantâneo", desc: "Aprovação imediata e início em minutos" },
-  { id: "cartao", icon: CreditCard,  label: "Cartão de Crédito", desc: "Até 12x no cartão" },
-  { id: "boleto", icon: FileText,    label: "Boleto Bancário", desc: "Compensação em até 1 dia útil" },
-];
-
-const STEP_LABELS = ["Pacote", "Dados & Perfil", "Pagamento"];
+const STEP_LABELS = ["Pacote", "Dados & Perfil", "Pagamento Pix"];
 
 export default function CheckoutPage() {
   const router          = useRouter();
@@ -31,7 +28,15 @@ export default function CheckoutPage() {
   const [email,   setEmail]   = useState("");
   const [contact, setContact] = useState("");
   const [profile, setProfile] = useState("");
-  const [payment, setPayment] = useState<PaymentMethod>("pix");
+
+  // Modal Pix state
+  const [pixModalData, setPixModalData] = useState<{
+    orderId: string;
+    paymentId: string;
+    pixCopiaECola: string;
+    amount: number;
+    packageTitle: string;
+  } | null>(null);
 
   if (!item) {
     return (
@@ -52,24 +57,53 @@ export default function CheckoutPage() {
   }
 
   async function handleSubmit() {
-    if (!name || !email || !profile) { setError("Preencha todos os campos obrigatórios."); return; }
+    if (!name || !email || !profile) {
+      setError("Preencha todos os campos obrigatórios.");
+      return;
+    }
     setLoading(true);
     setError("");
+
     try {
+      // 1. Criação do pedido com método Pix
       const orderData: OrderInput = {
         customer: { name, email, contact },
         profile,
         packageId:       item!.id,
         packageSnapshot: item!,
         price:           item!.price,
-        payment:         { method: payment, status: "aguardando" },
+        payment:         { method: "pix", status: "aguardando" },
         status:          "pendente",
         userId:          null,
       };
-      const id = await createOrder(orderData);
+      const orderId = await createOrder(orderData);
+
+      // 2. Solicitação da cobrança Pix ao backend Efí Bank
+      const pixRes = await requestPixCharge({
+        orderId,
+        packageId: item!.id,
+        customerName: name,
+        customerEmail: email,
+      });
+
+      if (!pixRes.ok) {
+        setError(pixRes.error || "Erro ao gerar o Pix. Tente novamente.");
+        setLoading(false);
+        return;
+      }
+
       clear();
-      router.push(`/pedido/${id}`);
-    } catch (e) {
+
+      // 3. Abre o modal interativo de pagamento Pix
+      setPixModalData({
+        orderId,
+        paymentId: pixRes.data.paymentId,
+        pixCopiaECola: pixRes.data.qrCode,
+        amount: item!.price,
+        packageTitle: item!.title,
+      });
+    } catch (e: any) {
+      console.error("Erro no checkout:", e);
       setError("Erro ao criar pedido. Tente novamente.");
     } finally {
       setLoading(false);
@@ -117,84 +151,118 @@ export default function CheckoutPage() {
           {step === 1 && (
             <div className="space-y-5 animate-fade-in">
               <div className="bg-[#161222] border border-[rgba(255,255,255,0.08)] rounded-xl p-6">
-                <h2 className="font-600 text-sm text-[#F0EEFF] mb-5">Seus dados</h2>
+                <h2 className="font-semibold text-sm text-[#F0EEFF] mb-5">Seus dados de entrega</h2>
                 <div className="space-y-4">
+                  <Input id="checkout-profile" label="@ ou link do perfil *" placeholder="@seuperfil ou https://instagram.com/..." value={profile} onChange={e => setProfile(e.target.value)} hint="Não precisa de senha — apenas o perfil público" />
                   <Input id="checkout-name" label="Nome completo *" placeholder="João Silva" value={name} onChange={e => setName(e.target.value)} />
-                  <Input id="checkout-email" label="E-mail *" type="email" placeholder="joao@email.com" value={email} onChange={e => setEmail(e.target.value)} />
+                  <Input id="checkout-email" label="E-mail *" type="email" placeholder="joao@email.com" value={email} onChange={e => setEmail(e.target.value)} hint="Você receberá a confirmação e comprovante por e-mail" />
                   <Input id="checkout-contact" label="WhatsApp (opcional)" placeholder="+55 11 99999-9999" value={contact} onChange={e => setContact(e.target.value)} />
-                  <Input id="checkout-profile" label="@ ou link do perfil *" placeholder="@seuperfil ou https://instagram.com/..." value={profile} onChange={e => setProfile(e.target.value)} hint="Não precisa de senha — só o link público" />
                 </div>
               </div>
               {error && <p className="text-sm text-red-400 text-center">{error}</p>}
-              <Button className="w-full" size="lg" onClick={() => setStep(2)}>
-                Continuar para pagamento →
+              <Button className="w-full" size="lg" onClick={() => {
+                if (!name || !email || !profile) {
+                  setError("Preencha todos os campos obrigatórios (*).");
+                  return;
+                }
+                setError("");
+                setStep(2);
+              }}>
+                Continuar para o Pix →
               </Button>
             </div>
           )}
 
-          {/* Step 2 — Payment */}
+          {/* Step 2 — Payment (Pix Only) */}
           {step === 2 && (
             <div className="space-y-5 animate-fade-in">
-              <div className="bg-[#161222] border border-[rgba(255,255,255,0.08)] rounded-xl p-6">
-                <h2 className="font-600 text-sm text-[#F0EEFF] mb-5">Forma de pagamento</h2>
-                <div className="space-y-2">
-                  {PAYMENT_OPTIONS.map(opt => (
-                    <button
-                      key={opt.id}
-                      id={`payment-${opt.id}`}
-                      onClick={() => setPayment(opt.id)}
-                      className={`w-full flex items-center gap-4 p-4 rounded-lg border text-left transition-all
-                        ${payment === opt.id
-                          ? "border-violet-500/60 bg-violet-500/8"
-                          : "border-[rgba(255,255,255,0.07)] hover:border-[rgba(255,255,255,0.14)]"
-                        }`}
-                    >
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center border ${payment === opt.id ? "bg-violet-600 border-violet-600" : "bg-[#1E1830] border-[rgba(255,255,255,0.08)]"}`}>
-                        <opt.icon size={16} className={payment === opt.id ? "text-white" : "text-[#A89FC8]"} />
-                      </div>
-                      <div className="flex-1">
-                        <p className={`text-sm font-600 ${payment === opt.id ? "text-white" : "text-[#A89FC8]"}`}>{opt.label}</p>
-                        <p className="text-xs text-[#6B6184]">{opt.desc}</p>
-                      </div>
-                      {payment === opt.id && (
-                        <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center">
-                          <Check size={11} className="text-white" />
-                        </div>
-                      )}
-                    </button>
-                  ))}
+              <div className="bg-[#161222] border border-violet-500/30 rounded-2xl p-6 shadow-[0_0_30px_rgba(139,92,246,0.15)] relative overflow-hidden">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-9 h-9 rounded-xl bg-violet-600 flex items-center justify-center text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                      <QrCode size={18} />
+                    </div>
+                    <div>
+                      <h2 className="font-bold text-sm text-white">Pagamento Exclusivo via Pix</h2>
+                      <p className="text-xs text-[#8C82AD]">Processamento instantâneo via Efí Bank</p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-[11px] font-bold text-green-400">
+                    <Zap size={11} /> Início em minutos
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#0F0B18] border border-white/5 space-y-3">
+                  <div className="flex items-center gap-2 text-xs text-[#B4ACD4]">
+                    <Check size={14} className="text-green-400 flex-shrink-0" />
+                    <span>Aprovação automática 24 horas por dia, 7 dias por semana.</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-[#B4ACD4]">
+                    <Check size={14} className="text-green-400 flex-shrink-0" />
+                    <span>Sem tarifas adicionais — você paga exatamente o valor do pacote.</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-[#B4ACD4]">
+                    <Check size={14} className="text-green-400 flex-shrink-0" />
+                    <span>QR Code dinâmico e código Pix Copia e Cola gerados na hora.</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Total */}
+              {/* Total Summary */}
               <div className="bg-[#161222] border border-[rgba(255,255,255,0.08)] rounded-xl p-5">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-[#6B6184]">Subtotal</span>
                   <span className="num text-[#F0EEFF]">{formatCurrency(item.price)}</span>
                 </div>
                 <div className="flex justify-between text-sm mb-4">
-                  <span className="text-[#6B6184]">Taxa</span>
-                  <span className="text-green-400 font-500">Grátis</span>
+                  <span className="text-[#6B6184]">Taxa de Processamento</span>
+                  <span className="text-green-400 font-semibold">Grátis (0%)</span>
                 </div>
-                <div className="flex justify-between font-700 border-t border-[rgba(255,255,255,0.07)] pt-4">
-                  <span className="text-[#F0EEFF]">Total</span>
-                  <span className="text-lg num text-[#F0EEFF]">{formatCurrency(item.price)}</span>
+                <div className="flex justify-between font-bold border-t border-[rgba(255,255,255,0.07)] pt-4">
+                  <span className="text-[#F0EEFF]">Total a Pagar</span>
+                  <span className="text-xl num text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 font-black">
+                    {formatCurrency(item.price)}
+                  </span>
                 </div>
               </div>
 
               {error && <p className="text-sm text-red-400 text-center">{error}</p>}
 
-              <Button className="w-full" size="lg" loading={loading} onClick={handleSubmit}>
-                <Lock size={14} />
-                Finalizar pedido com segurança
+              <Button
+                className="w-full bg-gradient-to-r from-violet-600 via-indigo-600 to-fuchsia-600 hover:brightness-110 shadow-[0_0_25px_rgba(139,92,246,0.3)] text-white font-bold py-4 text-base"
+                size="lg"
+                loading={loading}
+                onClick={handleSubmit}
+              >
+                <Lock size={16} />
+                Gerar QR Code Pix Seguro
               </Button>
-              <button onClick={() => setStep(1)} className="w-full flex items-center justify-center gap-1.5 text-xs text-[#6B6184] hover:text-[#A89FC8] transition-colors mt-1">
-                <ArrowLeft size={12} /> Voltar
+
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="w-full flex items-center justify-center gap-1.5 text-xs text-[#6B6184] hover:text-[#A89FC8] transition-colors mt-2"
+              >
+                <ArrowLeft size={12} /> Voltar para dados
               </button>
             </div>
           )}
         </div>
       </main>
+
+      {/* Modal de Pagamento Pix com QR Code e Polling */}
+      {pixModalData && (
+        <PixPaymentModal
+          orderId={pixModalData.orderId}
+          paymentId={pixModalData.paymentId}
+          pixCopiaECola={pixModalData.pixCopiaECola}
+          amount={pixModalData.amount}
+          packageTitle={pixModalData.packageTitle}
+          onClose={() => {
+            router.push(`/pedido/${pixModalData.orderId}`);
+          }}
+        />
+      )}
     </>
   );
 }
