@@ -2,16 +2,8 @@
 import { useState, useMemo } from "react";
 import { usePackages } from "@/hooks/usePackages";
 import { PackageCard, PackageCardSkeleton } from "@/components/site/PackageCard";
-
-const NET_ICON: Record<string, string> = {
-  Instagram: "📸",
-  TikTok: "🎵",
-  YouTube: "▶️",
-  Facebook: "👍",
-  Twitter: "🐦",
-  "X (Twitter)": "🐦",
-  Kwai: "🎬",
-};
+import { SocialIcon } from "@/components/ui/SocialIcon";
+import { Globe } from "lucide-react";
 
 export function CatalogSection() {
   const { packages, loading } = usePackages();
@@ -40,15 +32,23 @@ export function CatalogSection() {
           </p>
         </div>
 
-        {/* Platform Filters */}
+        {/* Platform Filters with Official Vector Icons */}
         <div className="filters flex gap-2.5 justify-center flex-wrap mb-12">
           {networks.map(n => (
             <button
               key={n}
               onClick={() => setFilter(n)}
-              className={`f-btn ${n === filter ? "active" : ""}`}
+              className={`f-btn flex items-center gap-2 px-5 py-3 rounded-full text-sm font-bold transition-all ${
+                n === filter
+                  ? "active shadow-[0_4px_20px_rgba(139,92,246,0.35)]"
+                  : "bg-white/[0.03] hover:bg-white/[0.08] text-[#9d99b5] hover:text-white border-white/[0.08]"
+              }`}
             >
-              <span>{n === "Todos" ? "🌐" : NET_ICON[n] ?? "📱"}</span>
+              {n === "Todos" ? (
+                <Globe size={18} className="text-violet-400" />
+              ) : (
+                <SocialIcon network={n} size={18} />
+              )}
               <span>{n}</span>
             </button>
           ))}

@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import { HeroPhone } from "@/components/site/HeroPhone";
 import { CatalogSection } from "@/components/site/CatalogSection";
 import { FAQ } from "@/components/site/FAQ";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 
 export const metadata: Metadata = {
   title: "EngajaPro — Impulsione suas Redes Sociais com Segurança",
@@ -72,19 +73,22 @@ export default function HomePage() {
           </div>
         </header>
 
-        {/* ─── Logos Strip ─── */}
-        <div className="logos border-y border-white/[0.08] py-10 bg-white/[0.01]">
+        {/* ─── Logos Strip with Official Vector Icons ─── */}
+        <div className="logos border-y border-white/[0.08] py-8 bg-white/[0.01]">
           <div className="wrap logos-in flex flex-col md:flex-row items-center justify-between gap-6">
             <small className="text-[#6f6b87] text-xs uppercase tracking-wider font-semibold">
               Impulsione em todas as redes
             </small>
-            <div className="logos-row flex gap-8 sm:gap-10 items-center flex-wrap justify-center text-[#9d99b5] font-bold text-base sm:text-lg">
-              <span className="hover:text-white transition-colors cursor-default">📸 Instagram</span>
-              <span className="hover:text-white transition-colors cursor-default">🎵 TikTok</span>
-              <span className="hover:text-white transition-colors cursor-default">▶️ YouTube</span>
-              <span className="hover:text-white transition-colors cursor-default">👍 Facebook</span>
-              <span className="hover:text-white transition-colors cursor-default">🐦 X</span>
-              <span className="hover:text-white transition-colors cursor-default">🎬 Kwai</span>
+            <div className="logos-row flex gap-4 sm:gap-6 items-center flex-wrap justify-center font-bold text-sm text-white">
+              {["Instagram", "TikTok", "YouTube", "Facebook", "X", "Kwai"].map(net => (
+                <div
+                  key={net}
+                  className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] hover:bg-white/[0.07] hover:border-white/[0.15] transition-all cursor-default shadow-sm"
+                >
+                  <SocialIcon network={net} size={20} />
+                  <span className="text-white font-bold">{net}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

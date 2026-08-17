@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useCart } from "@/store/cart";
-import { formatNumber, NETWORK_ICONS } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
+import { SocialIcon } from "@/components/ui/SocialIcon";
+import { Zap, Heart, Users, Play, MessageSquare, Repeat } from "lucide-react";
 import type { Package } from "@/types";
 
 interface PackageCardProps {
@@ -11,33 +13,36 @@ interface PackageCardProps {
 export function PackageCard({ pkg }: PackageCardProps) {
   const { setItem } = useCart();
 
-  const iconMap: Record<string, string> = {
-    Seguidores: "👥",
-    Curtidas: "❤️",
-    Visualizações: "▶️",
-    Comentários: "💬",
-    Compartilhamentos: "🔄",
-  };
-
-  const serviceIcon = iconMap[pkg.service] || "⚡";
-  const netIcon = NETWORK_ICONS[pkg.network] || "📱";
+  function getServiceIcon(service: string) {
+    const s = (service || "").toLowerCase();
+    if (s.includes("seguidor") || s.includes("inscrito")) return <Users className="text-violet-400" size={28} />;
+    if (s.includes("curtida")) return <Heart className="text-pink-400 fill-pink-400/20" size={28} />;
+    if (s.includes("visualiza") || s.includes("view")) return <Play className="text-cyan-400 fill-cyan-400/20" size={28} />;
+    if (s.includes("coment")) return <MessageSquare className="text-amber-400" size={28} />;
+    if (s.includes("compartilh")) return <Repeat className="text-emerald-400" size={28} />;
+    return <Zap className="text-violet-400" size={28} />;
+  }
 
   return (
     <div
       id={`pkg-${pkg.id}`}
-      className={`card ${pkg.popular ? "featured" : ""} flex flex-col justify-between`}
+      className={`card ${pkg.popular ? "featured" : ""} flex flex-col justify-between group`}
     >
       {pkg.popular && (
         <span className="ribbon">🔥 Popular</span>
       )}
 
       <div>
-        <span className="card-net inline-flex items-center gap-2">
-          <span>{netIcon}</span>
-          <span>{pkg.network}</span>
-        </span>
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <span className="card-net inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-bold text-white">
+            <SocialIcon network={pkg.network} size={16} />
+            <span>{pkg.network}</span>
+          </span>
+        </div>
 
-        <div className="card-ic text-4xl my-4">{serviceIcon}</div>
+        <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.07] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+          {getServiceIcon(pkg.service)}
+        </div>
 
         <h3 className="text-xl font-bold text-white mb-1 mono">
           {pkg.title}
