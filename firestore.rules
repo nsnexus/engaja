@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuth()       { return request.auth != null; }
+    function isAdmin()      { return isAuth() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"; }
+    function isOwner(uid)   { return isAuth() && request.auth.uid == uid; }
+
+    // ─── Packages ───────────────────────────────────────────
+    match /packages/{pkgId} {
+      allow read: if true;                 // público
+      allow write: if isAdmin();
+    }
+
+    // ─── Orders ─────────────────────────────────────────────
+    match /orders/{orderId} {
+      allow create: if true;               // qualquer pessoa pode criar pedido
+      allow read: if isAdmin()
+                  || (isAuth() && resource.data.userId == request.auth.uid)
+                  || true;                 // acesso por ID sem auth (link de rastreamento)
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ─── Users ──────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if isAdmin() || isOwner(uid);
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) && !("role" in request.resource.data.diff(resource.data).affectedKeys())
+                    || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ─── Settings ───────────────────────────────────────────
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

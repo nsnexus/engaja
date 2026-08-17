@@ -1,26 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+
+  --color-surface-base: #09070F;
+  --color-surface-card: #130F20;
+  --color-surface-overlay: #1C1630;
+  --color-surface-hover: #261E40;
+
+  --color-brand-primary: #8b5cf6;
+  --color-brand-light: #a78bfa;
+  --color-brand-dark: #6d28d9;
+}
+
+/* ─── Root tokens ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface-base:    #09070F;
+  --surface-card:    #130F20;
+  --surface-overlay: #1C1630;
+  --surface-hover:   #261E40;
+
+  --ink:           #F8F7FF;
+  --ink-secondary: #B4ACD4;
+  --ink-muted:     #756B96;
+  --ink-disabled:  #433A63;
+
+  --brand:         #8b5cf6;
+  --brand-dim:     #6d28d9;
+  --brand-glow:    #a78bfa;
+  --brand-cyan:    #06b6d4;
+
+  --border:        rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus:  #8b5cf6;
+
+  --success:       #10b981;
+  --warning:       #f59e0b;
+  --danger:        #ef4444;
+  --info:          #6366f1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--surface-base);
+  color: var(--ink);
+  font-family: var(--font-sans), "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100dvh;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.10) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans), "Plus Jakarta Sans", "Inter", sans-serif;
+  color: #FFFFFF;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(9, 7, 15, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(139, 92, 246, 0.4);
+  color: #ffffff;
+}
+
+/* ─── Cards & Glassmorphism ─── */
+.glass-card {
+  background: rgba(19, 15, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 12px 40px -8px rgba(139, 92, 246, 0.2);
+}
+
+/* ─── Ambient Glow ─── */
+.glow-brand {
+  box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.45);
+}
+
+.glow-brand-lg {
+  box-shadow: 0 0 60px -10px rgba(139, 92, 246, 0.55);
+}
+
+/* ─── Gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 20%, #c4b5fd 60%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  padding-bottom: 0.1em;
+}
+
+.gradient-text-vibrant {
+  background: linear-gradient(135deg, #c084fc 0%, #818cf8 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+/* ─── Shimmer skeleton ─── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Tabular nums ─── */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ─── Pulse delivery bar ─── */
+.pulse-bar {
+  position: relative;
+  height: 6px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgba(139, 92, 246, 0.15);
+}
+.pulse-bar::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--progress-width, 0%);
+  background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+  border-radius: 9999px;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+  transition: width 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ─── Interactive press ─── */
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.98);
 }
